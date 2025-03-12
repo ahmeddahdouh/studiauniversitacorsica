@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { Analytics } from "@vercel/analytics/react"
 const CorsicaLoginApp = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [formData, setFormData] = useState({
