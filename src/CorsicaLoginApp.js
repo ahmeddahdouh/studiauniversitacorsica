@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Analytics } from "@vercel/analytics/react"
 const CorsicaLoginApp = () => {
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isChanged, setIsChanged] = useState(0);
     const [formData, setFormData] = useState({
         nom: '',
         prenom: '',
@@ -9,40 +10,84 @@ const CorsicaLoginApp = () => {
         specialite: ''
     });
 
-    const handleChange = (e) => {
+
+     const handleChange = async (e) => {
         const { id, value } = e.target;
         setFormData(prevData => ({
             ...prevData,
             [id]: value
         }));
+         if (isChanged==0) {
+          setIsChanged(1);
+        }
     };
 
-    const handleSubmit = (e) => {
+    useEffect(() => {
+        if (isChanged === 1) {
+            const sendData = async () => {
+                try {
+                    const response = await fetch(
+                        "https://clickmonitor.onrender.com/student_write",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                        }
+                    );
+                    if (!response.ok) {
+                        console.error("Erreur lors de l'appel API");
+                    }
+                } catch (error) {
+                    console.error("Erreur réseau", error);
+                }
+            };
+            sendData();
+        }
+    }, [isChanged]);
+    const handleSubmit = async (e) => {
+        debugger;
         e.preventDefault();
         setIsSubmitted(true);
+
+        try {
+            const response = await fetch('https://clickmonitor.onrender.com/student_click', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            if (response.ok) {
+                console.log('Appel API réussi');
+            } else {
+                console.error('Erreur lors de l\'appel API');
+            }
+        } catch (error) {
+            console.error('Erreur réseau', error);
+        }
     };
+
 
     if (isSubmitted) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-                <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-lg">
-                    <h1 className="text-3xl font-bold text-orange-500 mb-6">Bienvenue sur le Campus Numérique</h1>
-                    <p className="text-xl mb-4">Vos informations ont été soumises avec succès.</p>
-                    <div className="mb-6">
-                        <h2 className="text-lg font-semibold mb-2">Récapitulatif :</h2>
-                        <p><span className="font-medium">Nom :</span> {formData.nom}</p>
-                        <p><span className="font-medium">Prénom :</span> {formData.prenom}</p>
-                        <p><span className="font-medium">Numéro étudiant :</span> {formData.numeroEtudiant}</p>
-                        <p><span className="font-medium">Spécialité :</span> {formData.specialite}</p>
-                    </div>
-                    <button
-                        className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
-                        onClick={() => setIsSubmitted(false)}
-                    >
-                        Retour au formulaire
-                    </button>
+            <div className="flex flex-col items-center justify-center min-h-screen bg-black text-green-400 p-4">
+                <div className="bg-gray-900 rounded-lg shadow-lg p-8 w-full max-w-lg border border-green-500">
+                    <h1 className="text-3xl font-bold text-red-500 mb-6 animate-pulse">🚨 ALERTE SÉCURITÉ 🚨</h1>
+                    <p className="text-lg font-mono mb-4">
+                        ❌ Cette offre était en réalité une <span className="text-yellow-400">simulation</span> dans le
+                        cadre d’un test de sensibilisation à la cybersécurité.
+                        <br/><br/>
+                        🎭 Objectif : Tester votre <span className="text-orange-500">vigilance</span> face aux attaques
+                        de <span className="text-red-500">phishing</span>.
+                        <br/><br/>
+                        ✅ <span className="text-green-300">Rassurez-vous, aucune de vos données n’a été enregistrée et rien de mal n’a été fait.</span>
+                        <br/><br/>
+                        🛡️ Restez prudents et ne tombez plus dans le piège ! 🚀
+                    </p>
                 </div>
             </div>
+
         );
     }
 
