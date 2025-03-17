@@ -188,13 +188,12 @@ const CorsicaLoginApp = () => {
                                     required
                                 >
                                     <option value="">-- Choisir une spécialité --</option>
-                                    <option value="Informatique">Informatique</option>
-                                    <option value="Droit">Droit</option>
-                                    <option value="Économie">Économie</option>
-                                    <option value="Langues">Langues</option>
-                                    <option value="Sciences">Sciences</option>
-                                    <option value="Lettres">Lettres</option>
-                                    <option value="Gestion">Gestion</option>
+                                    <option value="Informatique">Métiers du multimédia et de l'Internet</option>
+                                    <option value="Droit">Génie biologique </option>
+                                    <option value="Économie">Génie civil</option>
+                                    <option value="Langues">Gestion des entreprises et des administrations</option>
+                                    <option value="Sciences">Hygiène, sécurité, environnement</option>
+                                    <option value="Lettres">Technique de Commercialisation</option>
                                 </select>
                             </div>
 
